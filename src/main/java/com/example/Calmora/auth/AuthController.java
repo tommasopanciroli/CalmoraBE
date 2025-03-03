@@ -2,10 +2,7 @@ package com.example.Calmora.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -19,9 +16,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
         appUserService.registerUser(
-                registerRequest.getUsername(),
+                registerRequest.getEmail(),
                 registerRequest.getPassword(),
-                Set.of(Role.ROLE_USER) // Assegna il ruolo di default
+                registerRequest.getRole(),
+                registerRequest.getName(),
+                registerRequest.getSurname(),
+                registerRequest.getUrlCertificato()
         );
         return ResponseEntity.ok("Registrazione avvenuta con successo");
     }
@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         String token = appUserService.authenticateUser(
-                loginRequest.getUsername(),
+                loginRequest.getEmail(),
                 loginRequest.getPassword()
         );
         return ResponseEntity.ok(new AuthResponse(token));

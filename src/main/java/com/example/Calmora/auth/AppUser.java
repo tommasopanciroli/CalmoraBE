@@ -1,6 +1,7 @@
 package com.example.Calmora.auth;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,7 +13,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 @NoArgsConstructor
 @Data
@@ -21,44 +24,47 @@ public class AppUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String surname;
+
     @Column(nullable = false, unique = true)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     @ToString.Exclude
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    @Column(nullable = false)
+    private Role role;
 
-    private  boolean accountNonExpired=true;
-    private  boolean accountNonLocked=true;
-    private  boolean credentialsNonExpired=true;
-    private  boolean enabled=true;
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    private boolean accountNonExpired = true;
+    private boolean accountNonLocked = true;
+    private boolean credentialsNonExpired = true;
+    private boolean enabled = true;
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.name()))
-                .collect(Collectors.toList());
+        return Set.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public AppUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this(username, password, true, true, true, true, authorities);
+    @Override
+    public String getUsername() {
+        return email; // username è l'email
     }
 
-    public AppUser(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
-        this.username = username;
+    public AppUser(String name, String surname, String email, String password, Role role) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
         this.password = password;
-        this.enabled = enabled;
-        this.accountNonExpired = accountNonExpired;
-        this.credentialsNonExpired = credentialsNonExpired;
-        this.accountNonLocked = accountNonLocked;
+        this.role = role != null ? role : Role.ROLE_USER;
     }
-
-
-
 }
-

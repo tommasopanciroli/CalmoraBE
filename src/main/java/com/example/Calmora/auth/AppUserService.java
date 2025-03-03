@@ -1,5 +1,6 @@
 package com.example.Calmora.auth;
 
+import com.example.Calmora.psychologist.Psychologist;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,26 +30,38 @@ public class AppUserService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    public AppUser registerUser(String username, String password, Set<Role> roles) {
-        if (appUserRepository.existsByUsername(username)) {
-            throw new EntityExistsException("Username già in uso");
+    // Registrazione di un nuovo utente
+    public AppUser registerUser(String email, String password, Role role, String name, String surname, String urlCertificato) {
+        if (appUserRepository.existsByEmail(email)) {
+            throw new EntityExistsException("Email già in uso");
         }
 
-        AppUser appUser = new AppUser();
-        appUser.setUsername(username);
-        appUser.setPassword(passwordEncoder.encode(password));
-        appUser.setRoles(roles);
-        return appUserRepository.save(appUser);
+        AppUser user;
+        String encodedPassword = passwordEncoder.encode(password);
+
+        if (role == Role.ROLE_PSYCHOLOGIST) {
+            if (urlCertificato == null || urlCertificato.isBlank()) {
+                throw new IllegalArgumentException("Gli psicologi devono fornire un certificato valido");
+            }
+            user = new Psychologist(name, surname, email, encodedPassword, urlCertificato);
+        } else {
+            user = new AppUser(name, surname, email, encodedPassword, role);
+        }
+
+        return appUserRepository.save(user);
     }
 
-    public Optional<AppUser> findByUsername(String username) {
-        return appUserRepository.findByUsername(username);
+    // Cerca un utente tramite email
+    public Optional<AppUser> findByEmail(String email) {
+        return appUserRepository.findByEmail(email);
     }
 
-    public String authenticateUser(String username, String password)  {
+    // Autenticazione di un utente e generazione del token JWT
+    public String authenticateUser(String email, String password)  {
         try {
+
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
+                    new UsernamePasswordAuthenticationToken(email, password)
             );
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -58,12 +71,9 @@ public class AppUserService {
         }
     }
 
-
-    public AppUser loadUserByUsername(String username)  {
-        AppUser appUser = appUserRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con username: " + username));
-
-
-        return appUser;
+    // Carica un utente dal database tramite email
+    public AppUser loadUserByEmail(String email)  {
+        return appUserRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con email: " + email));
     }
 }
