@@ -23,6 +23,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     // cerca psicologi per nome e cognome
     @Query("SELECT p FROM Psychologist p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))" +
-            "OR LOWER (p.surname) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+            " OR LOWER (p.surname) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Psychologist> searchPsychologists(@Param("keyword") String keyword);
 }
