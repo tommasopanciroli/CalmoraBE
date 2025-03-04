@@ -2,9 +2,7 @@ package com.example.Calmora.psychologist;
 
 import com.example.Calmora.auth.AppUserRepository;
 import com.example.Calmora.auth.AppUserService;
-import com.example.Calmora.auth.Role;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import com.example.Calmora.role.Role;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,5 +1,6 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.exceptions;
 
+import com.example.Calmora.security.JwtTokenMissingException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;

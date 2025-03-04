@@ -1,4 +1,4 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

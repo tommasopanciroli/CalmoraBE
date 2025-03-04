@@ -1,5 +1,8 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.config;
 
+import com.example.Calmora.security.CustomUserDetailsService;
+import com.example.Calmora.security.JwtAuthenticationEntryPoint;
+import com.example.Calmora.security.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,8 +1,7 @@
 package com.example.Calmora.auth;
 
+import com.example.Calmora.role.Role;
 import lombok.Data;
-
-import java.util.Set;
 
 @Data
 public class RegisterRequest {

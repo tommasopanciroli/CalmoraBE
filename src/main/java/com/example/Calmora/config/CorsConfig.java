@@ -1,4 +1,4 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

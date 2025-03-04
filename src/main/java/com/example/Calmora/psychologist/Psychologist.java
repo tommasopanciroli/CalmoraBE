@@ -1,7 +1,7 @@
 package com.example.Calmora.psychologist;
 
 import com.example.Calmora.auth.AppUser;
-import com.example.Calmora.auth.Role;
+import com.example.Calmora.role.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

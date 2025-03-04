@@ -1,4 +1,4 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

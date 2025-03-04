@@ -1,4 +1,4 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.security;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,4 +1,4 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.config;
 
 
 import io.swagger.v3.oas.models.Components;

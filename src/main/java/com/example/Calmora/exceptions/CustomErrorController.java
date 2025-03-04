@@ -1,4 +1,4 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;

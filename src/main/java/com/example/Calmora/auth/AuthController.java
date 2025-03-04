@@ -1,6 +1,8 @@
 package com.example.Calmora.auth;
 
+import com.example.Calmora.dto.AuthResponse;
 import com.example.Calmora.psychologist.Psychologist;
+import com.example.Calmora.role.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

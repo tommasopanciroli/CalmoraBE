@@ -1,4 +1,4 @@
-package com.example.Calmora.auth;
+package com.example.Calmora.role;
 
 public enum Role {
     ROLE_USER,
