@@ -33,30 +33,5 @@ public class AuthRunner implements ApplicationRunner {
             );
         }
 
-        // Creazione dell'utente user se non esiste
-        Optional<AppUser> normalUser = appUserService.findByEmail("user@example.com");
-        if (normalUser.isEmpty()) {
-            appUserService.registerUser(
-                    "user@example.com",
-                    "userpwd",
-                    Role.ROLE_USER,
-                    "User",
-                    "Example",
-                    null
-            );
-        }
-
-        // Creazione dell'utente psychologist se non esiste
-        Optional<AppUser> psychologistUser = appUserService.findByEmail("psychologist@example.com");
-        if (psychologistUser.isEmpty()) {
-            appUserService.registerUser(
-                    "psychologist@example.com",
-                    "psychologistpwd",
-                    Role.ROLE_PSYCHOLOGIST,
-                    "Psychologist",
-                    "Therapist",
-                    "https://example.com/certificato.pdf"
-            );
-        }
     }
 }

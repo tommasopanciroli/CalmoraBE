@@ -12,12 +12,15 @@ import lombok.Setter;
 @Entity
 @Table(name = "psychologists")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Psychologist extends AppUser {
 
     @Column(nullable = false)
     private String urlCertificato;
 
     // admin dovrà approvare
+    @Getter
     private boolean approvato = false;
 
     public Psychologist(String name, String surname, String email, String password, String urlCertificato) {
@@ -26,5 +29,4 @@ public class Psychologist extends AppUser {
         this.urlCertificato = urlCertificato;
         this.approvato = false;
     }
-
 }

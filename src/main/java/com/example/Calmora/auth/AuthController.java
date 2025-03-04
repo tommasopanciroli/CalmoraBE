@@ -1,10 +1,11 @@
 package com.example.Calmora.auth;
 
+import com.example.Calmora.psychologist.Psychologist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -12,6 +13,7 @@ import java.util.Set;
 public class AuthController {
 
     private final AppUserService appUserService;
+    private final AppUserRepository appUserRepository;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
@@ -33,5 +35,15 @@ public class AuthController {
                 loginRequest.getPassword()
         );
         return ResponseEntity.ok(new AuthResponse(token));
+    }
+
+    @GetMapping("/patients")
+    public List<AppUser> getAllPatient() {
+        return appUserRepository.findPatientByRole(Role.ROLE_USER);
+    }
+
+    @GetMapping("/search")
+    public List<Psychologist> searchPsychologists(@RequestParam String keyword) {
+        return appUserService.searchPsychologists(keyword);
     }
 }

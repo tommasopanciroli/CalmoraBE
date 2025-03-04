@@ -12,8 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AppUserService {
@@ -57,7 +59,23 @@ public class AppUserService {
     }
 
     // Autenticazione di un utente e generazione del token JWT
-    public String authenticateUser(String email, String password)  {
+    public String authenticateUser(String email, String password) {
+
+        // gestione del ruolo di admin
+        if (email.equals("admin@example.com")) {
+            AppUser admin = appUserRepository.findByEmail(email)
+                    .orElseThrow(() -> new SecurityException("Credenziali non valide"));
+
+
+            if (!passwordEncoder.matches(password, admin.getPassword())) {
+                throw new SecurityException("Credenziali non valide");
+            }
+
+            // forza il ruolo di admin
+            admin.setRole(Role.ROLE_ADMIN);
+            return jwtTokenUtil.generateToken(admin);
+        }
+
         try {
 
             Authentication authentication = authenticationManager.authenticate(
@@ -72,8 +90,32 @@ public class AppUserService {
     }
 
     // Carica un utente dal database tramite email
-    public AppUser loadUserByEmail(String email)  {
+    public AppUser loadUserByEmail(String email) {
         return appUserRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con email: " + email));
+    }
+
+    // prende gli psicologi ancora in fase di approvazione
+    public List<Psychologist> getPendingPsychologists() {
+        return appUserRepository.findAllByRole(Role.ROLE_PSYCHOLOGIST).stream()
+                .filter(p -> p instanceof Psychologist && !p.isApprovato())
+                .map(p -> (Psychologist) p)
+                .toList();
+    }
+
+    public Psychologist approvePsychologist(Long psychologistId) {
+        // trovo lo psicologo tramite ID
+        Psychologist psychologist = (Psychologist) appUserRepository.findById(psychologistId)
+                .orElseThrow(() -> new EntityNotFoundException("Psicologo non trovato"));
+
+        // approvo lo psicologo
+        psychologist.setApprovato(true);
+
+        // salvo la modifica nel database
+        return appUserRepository.save(psychologist);
+    }
+
+    public List<Psychologist> searchPsychologists(String keyword) {
+        return appUserRepository.searchPsychologists(keyword);
     }
 }
