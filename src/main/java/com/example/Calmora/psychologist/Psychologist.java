@@ -2,9 +2,7 @@ package com.example.Calmora.psychologist;
 
 import com.example.Calmora.auth.AppUser;
 import com.example.Calmora.role.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +17,13 @@ public class Psychologist extends AppUser {
     @Column(nullable = false)
     private String urlCertificato;
 
+    @Column(nullable = false, unique = true)
+    private String urlMeet;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private AppUser appUser;
+
     // admin dovrà approvare
     @Getter
     private boolean approvato = false;
@@ -28,5 +33,12 @@ public class Psychologist extends AppUser {
 
         this.urlCertificato = urlCertificato;
         this.approvato = false;
+        this.urlMeet = generateRandomUrlMeet();
+    }
+
+    // genera un link meet per ogni psicologo
+    private String generateRandomUrlMeet() {
+        String random = java.util.UUID.randomUUID().toString().substring(0, 8);
+        return "https://meet.google.com/" + random;
     }
 }

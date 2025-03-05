@@ -1,5 +1,6 @@
 package com.example.Calmora.auth;
 
+import com.example.Calmora.psychologist.Psychologist;
 import com.example.Calmora.role.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -39,6 +40,9 @@ public class AppUser implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Psychologist psychologist;
 
     public void setRole(Role role) {
         this.role = role;

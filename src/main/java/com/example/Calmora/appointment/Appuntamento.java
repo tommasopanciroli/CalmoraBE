@@ -1,13 +1,20 @@
 package com.example.Calmora.appointment;
 
 import com.example.Calmora.auth.AppUser;
+import com.example.Calmora.psychologist.Psychologist;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "appuntamenti")
 public class Appuntamento {
 
@@ -21,17 +28,21 @@ public class Appuntamento {
 
     @ManyToOne
     @JoinColumn(name = "psicologo_id")
-    private AppUser psicologo;
+    private Psychologist psicologo;
+
+    @Column(nullable = false)
+    private String urlMeet;
 
     private LocalDateTime dataAppuntamento;
 
     private boolean confermato;
 
-    public Appuntamento(AppUser paziente, AppUser psicologo, LocalDateTime dataAppuntamento) {
+    public Appuntamento(Psychologist psicologo, AppUser paziente, LocalDateTime dataAppuntamento) {
         this.paziente = paziente;
         this.psicologo = psicologo;
         this.dataAppuntamento = dataAppuntamento;
         this.confermato = true;
+        this.urlMeet = psicologo.getUrlMeet();
     }
 
 }
