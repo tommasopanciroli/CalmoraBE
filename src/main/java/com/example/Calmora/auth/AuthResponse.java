@@ -1,4 +1,4 @@
-package com.example.Calmora.dto;
+package com.example.Calmora.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,5 @@
 package com.example.Calmora.auth;
 
-import com.example.Calmora.dto.AuthResponse;
 import com.example.Calmora.psychologist.Psychologist;
 import com.example.Calmora.role.Role;
 import lombok.RequiredArgsConstructor;

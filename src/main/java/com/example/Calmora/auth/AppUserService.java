@@ -1,5 +1,6 @@
 package com.example.Calmora.auth;
 
+import com.example.Calmora.google.CalendarService;
 import com.example.Calmora.psychologist.Psychologist;
 import com.example.Calmora.role.Role;
 import com.example.Calmora.security.JwtTokenUtil;
@@ -32,6 +33,9 @@ public class AppUserService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private CalendarService calendarService;
+
     // Registrazione di un nuovo utente
     public AppUser registerUser(String email, String password, Role role, String name, String surname, String urlCertificato) {
         if (appUserRepository.existsByEmail(email)) {
@@ -45,7 +49,8 @@ public class AppUserService {
             if (urlCertificato == null || urlCertificato.isBlank()) {
                 throw new IllegalArgumentException("Gli psicologi devono fornire un certificato valido");
             }
-            user = new Psychologist(name, surname, email, encodedPassword, urlCertificato);
+            String meetLink = calendarService.createMeetLink();
+            user = new Psychologist(name, surname, email, encodedPassword, urlCertificato, meetLink);
         } else {
             user = new AppUser(name, surname, email, encodedPassword, role);
         }

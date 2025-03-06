@@ -1,6 +1,7 @@
 package com.example.Calmora.psychologist;
 
 import com.example.Calmora.auth.AppUser;
+import com.example.Calmora.google.CalendarService;
 import com.example.Calmora.role.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,25 +21,15 @@ public class Psychologist extends AppUser {
     @Column(nullable = false, unique = true)
     private String urlMeet;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private AppUser appUser;
-
     // admin dovrà approvare
-    @Getter
     private boolean approvato = false;
 
-    public Psychologist(String name, String surname, String email, String password, String urlCertificato) {
+    public Psychologist(String name, String surname, String email, String password, String urlCertificato, String urlMeet) {
         super(name, surname, email, password, Role.ROLE_PSYCHOLOGIST);
 
         this.urlCertificato = urlCertificato;
         this.approvato = false;
-        this.urlMeet = generateRandomUrlMeet();
+        this.urlMeet = urlMeet;
     }
 
-    // genera un link meet per ogni psicologo
-    private String generateRandomUrlMeet() {
-        String random = java.util.UUID.randomUUID().toString().substring(0, 8);
-        return "https://meet.google.com/" + random;
-    }
 }

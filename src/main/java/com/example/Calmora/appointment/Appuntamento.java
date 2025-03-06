@@ -33,14 +33,19 @@ public class Appuntamento {
     @Column(nullable = false)
     private String urlMeet;
 
+    @Column(nullable = false)
     private LocalDateTime dataAppuntamento;
+
+    @Column(nullable = false)
+    private LocalDateTime dataFineAppuntamento;
 
     private boolean confermato;
 
-    public Appuntamento(Psychologist psicologo, AppUser paziente, LocalDateTime dataAppuntamento) {
+    public Appuntamento(Psychologist psicologo, AppUser paziente, LocalDateTime dataAppuntamento, LocalDateTime dataFineAppuntamento) {
         this.paziente = paziente;
         this.psicologo = psicologo;
         this.dataAppuntamento = dataAppuntamento;
+        this.dataFineAppuntamento = dataFineAppuntamento.plusHours(1);
         this.confermato = true;
         this.urlMeet = psicologo.getUrlMeet();
     }
