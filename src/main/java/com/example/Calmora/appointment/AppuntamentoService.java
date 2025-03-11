@@ -79,7 +79,10 @@ public class AppuntamentoService {
     }
 
     // Ottieni tutti gli appuntamenti di uno psicologo
-    public List<Appuntamento> getAppuntamentiByPsychologist(Psychologist psychologist) {
+    public List<Appuntamento> getAppuntamentiByPsychologist(Long psychologistId) {
+        Psychologist psychologist = (Psychologist) appUserRepository.findById(psychologistId)
+                .orElseThrow(() -> new EntityNotFoundException("Psicologo non trovato con ID: " + psychologistId));
+
         return appuntamentoRepository.findByPsicologo(psychologist);
     }
 

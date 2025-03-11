@@ -1,6 +1,7 @@
-package com.example.Calmora.config;
+package com.example.Calmora.email;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,14 +12,24 @@ import java.util.Properties;
 @Configuration
 public class EmailConfig {
 
+    @Value("${EMAIL}")
+    private String email;
+
+    @Value("${MAIL_SECRET}")
+    private String mailSecret;
+
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("${EMAIL}");
-        mailSender.setPassword("${MAIL_SECRET}");
+        // Stampa i valori delle variabili per verificare se vengono lette
+        System.out.println("📩 EMAIL: " + System.getenv("EMAIL"));
+        System.out.println("🔑 MAIL_SECRET: " + System.getenv("MAIL_SECRET"));
+
+        mailSender.setUsername(email);
+        mailSender.setPassword(mailSecret);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

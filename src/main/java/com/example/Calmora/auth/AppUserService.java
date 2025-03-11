@@ -1,6 +1,7 @@
 package com.example.Calmora.auth;
 
-import com.example.Calmora.google.CalendarService;
+import com.example.Calmora.email.EmailService;
+import com.example.Calmora.google.MeetService;
 import com.example.Calmora.psychologist.Psychologist;
 import com.example.Calmora.role.Role;
 import com.example.Calmora.security.JwtTokenUtil;
@@ -34,7 +35,10 @@ public class AppUserService {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private CalendarService calendarService;
+    private MeetService meetService;
+
+    @Autowired
+    private EmailService emailService;
 
     // Registrazione di un nuovo utente
     public AppUser registerUser(String email, String password, Role role, String name, String surname, String urlCertificato) {
@@ -49,16 +53,50 @@ public class AppUserService {
             if (urlCertificato == null || urlCertificato.isBlank()) {
                 throw new IllegalArgumentException("Gli psicologi devono fornire un certificato valido");
             }
-            String meetLink = calendarService.createMeetLink();
+            String meetLink = meetService.createMeetLink(email);
             user = new Psychologist(name, surname, email, encodedPassword, urlCertificato, meetLink);
+            String subject = "Registrazione in Calmora avvenuta con successo";
+            String message = """
+                    Ciao %s %s,
+                    
+                    La registrazione alla piattaforma Calmora è avvenuta con successo.
+                    
+                    Il tuo account in questo momento è in attesa di approvazione da parte dei nostri amministratori.
+                    Ti avviseremo non appena sarà attivato.
+                    
+                    Nel frattempo, ecco il tuo link per accedere alla stanza virtuale per i tuoi appuntamenti:
+                            %s
+                    
+                    Grazie per aver scelto Calmora!
+                    
+                    Cordiali saluti,
+                    Il team di Calmora
+                    """.formatted(name, surname, meetLink);
+
+
+            emailService.sendEmail(email, subject, message);
         } else {
             user = new AppUser(name, surname, email, encodedPassword, role);
+            String subject = "Registrazione in Calmora avvenuta con successo";
+            String message = """
+                    Ciao %s %s,
+                    
+                    La registrazione alla piattaforma Calmora è avvenuta con successo.
+                    Puoi accedere alla piattaforma con le credenziali che hai inserito.  
+                    
+                    Grazie per aver scelto Calmora, ci impegneremo ogni giorno per garantirti il miglior supporto possibile.
+                    
+                    Cordiali saluti,
+                    Il team di Calmora
+                    """.formatted(name, surname);
+
+            emailService.sendEmail(email, subject, message);
         }
 
         return appUserRepository.save(user);
     }
 
-    // Cerca un utente tramite email
+
     public Optional<AppUser> findByEmail(String email) {
         return appUserRepository.findByEmail(email);
     }

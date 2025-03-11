@@ -1,7 +1,6 @@
 package com.example.Calmora.psychologist;
 
 import com.example.Calmora.auth.AppUser;
-import com.example.Calmora.google.CalendarService;
 import com.example.Calmora.role.Role;
 import jakarta.persistence.*;
 import lombok.Getter;

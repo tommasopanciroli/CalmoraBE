@@ -34,8 +34,8 @@ public class AppuntamentoController {
 
     // ottieni tutti gli appuntamenti di uno psicologo
     @GetMapping("/psychologist/{psychologistId}")
-    public ResponseEntity<List<Appuntamento>> getAppuntamentiByPsychologist(@PathVariable Psychologist psychologist) {
-        List<Appuntamento> appuntamenti = appuntamentoService.getAppuntamentiByPsychologist(psychologist);
+    public ResponseEntity<List<Appuntamento>> getAppuntamentiByPsychologist(@PathVariable Long psychologistId) {
+        List<Appuntamento> appuntamenti = appuntamentoService.getAppuntamentiByPsychologist(psychologistId);
         return ResponseEntity.ok(appuntamenti);
     }
 
