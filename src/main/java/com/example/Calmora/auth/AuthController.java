@@ -4,6 +4,7 @@ import com.example.Calmora.psychologist.Psychologist;
 import com.example.Calmora.role.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,11 +40,13 @@ public class AuthController {
     }
 
     @GetMapping("/patients")
+    @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
     public List<AppUser> getAllPatient() {
         return appUserRepository.findPatientByRole(Role.ROLE_USER);
     }
 
     @GetMapping("/search")
+    @PreAuthorize("hasRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<Psychologist> searchPsychologists(@RequestParam String keyword) {
         return appUserService.searchPsychologists(keyword);
     }

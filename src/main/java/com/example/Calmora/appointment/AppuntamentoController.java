@@ -4,6 +4,7 @@ package com.example.Calmora.appointment;
 import com.example.Calmora.auth.AppUserRepository;
 import com.example.Calmora.psychologist.Psychologist;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class AppuntamentoController {
 
     // prenota un appuntamento
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Appuntamento> prenotaAppuntamento(
             @RequestParam Long psychologistId,
             @RequestParam Long patientId,
@@ -34,6 +36,7 @@ public class AppuntamentoController {
 
     // ottieni tutti gli appuntamenti di uno psicologo
     @GetMapping("/psychologist/{psychologistId}")
+    @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
     public ResponseEntity<List<Appuntamento>> getAppuntamentiByPsychologist(@PathVariable Long psychologistId) {
         List<Appuntamento> appuntamenti = appuntamentoService.getAppuntamentiByPsychologist(psychologistId);
         return ResponseEntity.ok(appuntamenti);
@@ -48,6 +51,7 @@ public class AppuntamentoController {
 
     // ottieni tutti gli appuntamenti di un paziente
     @GetMapping("/patient/{patientId}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<Appuntamento>> getAppuntamentiByPatient(@PathVariable Long patientId) {
         List<Appuntamento> appuntamenti = appuntamentoService.getAppuntamentiByPatient(patientId);
         return ResponseEntity.ok(appuntamenti);

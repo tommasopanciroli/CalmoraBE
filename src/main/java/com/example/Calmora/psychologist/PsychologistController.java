@@ -4,6 +4,7 @@ import com.example.Calmora.auth.AppUserRepository;
 import com.example.Calmora.auth.AppUserService;
 import com.example.Calmora.role.Role;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +27,13 @@ public class PsychologistController {
     }
 
     @GetMapping("/pending")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Psychologist> getPendingPsychologists() {
         return appUserService.getPendingPsychologists();
     }
 
     @PutMapping("/approve/{psychologistId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> approvePsychologist(@PathVariable Long psychologistId) {
         appUserService.approvePsychologist(psychologistId);
         return ResponseEntity.ok("Psicologo approvato");
