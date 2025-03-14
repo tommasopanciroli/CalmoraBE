@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class Psychologist extends AppUser {
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "text")
     private String urlCertificato;
 
     @Column(nullable = false, unique = true)
