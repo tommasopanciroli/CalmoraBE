@@ -24,10 +24,6 @@ public class EmailConfig {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
 
-        // Stampa i valori delle variabili per verificare se vengono lette
-        System.out.println("📩 EMAIL: " + System.getenv("EMAIL"));
-        System.out.println("🔑 MAIL_SECRET: " + System.getenv("MAIL_SECRET"));
-
         mailSender.setUsername(email);
         mailSender.setPassword(mailSecret);
 
