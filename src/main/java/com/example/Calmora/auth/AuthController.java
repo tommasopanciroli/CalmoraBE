@@ -18,7 +18,7 @@ public class AuthController {
     private final AppUserRepository appUserRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
         appUserService.registerUser(
                 registerRequest.getEmail(),
                 registerRequest.getPassword(),
@@ -27,7 +27,15 @@ public class AuthController {
                 registerRequest.getSurname(),
                 registerRequest.getUrlCertificato()
         );
-        return ResponseEntity.ok("Registrazione avvenuta con successo");
+
+        String token = appUserService.authenticateUser(
+                registerRequest.getEmail(),
+                registerRequest.getPassword()
+        );
+
+        AppUser user = appUserService.loadUserByEmail(registerRequest.getEmail());
+
+        return ResponseEntity.ok( new AuthResponse(token, user.getRole().toString()));
     }
 
     @PostMapping("/login")
@@ -36,7 +44,8 @@ public class AuthController {
                 loginRequest.getEmail(),
                 loginRequest.getPassword()
         );
-        return ResponseEntity.ok(new AuthResponse(token));
+        AppUser user = appUserService.loadUserByEmail(loginRequest.getEmail());
+        return ResponseEntity.ok(new AuthResponse(token, user.getRole().toString()));
     }
 
     @GetMapping("/patients")
