@@ -1,5 +1,6 @@
 package com.example.Calmora.security;
 
+import com.example.Calmora.auth.AppUser;
 import com.example.Calmora.auth.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +14,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private AppUserRepository appUserRepository;
 
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return appUserRepository.findByEmail(email)
+        AppUser user = appUserRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato con email: " + email));
+        return new CustomUserDetails(user);
     }
 }

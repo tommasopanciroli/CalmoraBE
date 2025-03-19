@@ -35,7 +35,7 @@ public class AuthController {
 
         AppUser user = appUserService.loadUserByEmail(registerRequest.getEmail());
 
-        return ResponseEntity.ok( new AuthResponse(token, user.getRole().toString()));
+        return ResponseEntity.ok( new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname()));
     }
 
     @PostMapping("/login")
@@ -45,7 +45,7 @@ public class AuthController {
                 loginRequest.getPassword()
         );
         AppUser user = appUserService.loadUserByEmail(loginRequest.getEmail());
-        return ResponseEntity.ok(new AuthResponse(token, user.getRole().toString()));
+        return ResponseEntity.ok(new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname()));
     }
 
     @GetMapping("/patients")
