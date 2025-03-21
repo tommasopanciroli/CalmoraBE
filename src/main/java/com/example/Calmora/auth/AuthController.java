@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -44,12 +46,16 @@ public class AuthController {
                 loginRequest.getEmail(),
                 loginRequest.getPassword()
         );
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Utente autenticato: " + auth.getName());
+        System.out.println("Ruoli (authorities): " + auth.getAuthorities());
+
         AppUser user = appUserService.loadUserByEmail(loginRequest.getEmail());
         return ResponseEntity.ok(new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname(), user.getEmail()));
     }
 
     @GetMapping("/patients")
-    @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
+    @PreAuthorize("hasAuthority('ROLE_PSYCHOLOGIST')")
     public List<AppUser> getAllPatient() {
         return appUserRepository.findPatientByRole(Role.ROLE_USER);
     }

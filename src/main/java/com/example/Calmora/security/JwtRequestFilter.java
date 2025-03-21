@@ -32,6 +32,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
+        System.out.println("👉 Header Authorization: " + request.getHeader("Authorization"));
 
         if (shouldNotFilter(request)) {
             chain.doFilter(request, response);
@@ -59,6 +60,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Valida il token e configura l'autenticazione nel contesto di sicurezza
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println("✅ Utente JWT trovato: " + username);
             UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(username);
 
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
@@ -81,11 +83,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private static final List<String> EXCLUDED_URLS = Arrays.asList(
             "/api/public",
-            "/api/auth/**",
+            "/api/auth/register",
+            "/api/auth/login",
+            "swagger-ui",
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/error",
-            "/sw.js"
+            "/error"
     );
 
 
