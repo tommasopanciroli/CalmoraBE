@@ -37,7 +37,7 @@ public class AuthController {
 
         AppUser user = appUserService.loadUserByEmail(registerRequest.getEmail());
 
-        return ResponseEntity.ok( new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname(), user.getEmail(), user.getId()));
+        return ResponseEntity.ok(new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname(), user.getEmail(), user.getId()));
     }
 
     @PostMapping("/login")
@@ -61,7 +61,7 @@ public class AuthController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<Psychologist> searchPsychologists(@RequestParam String keyword) {
         return appUserService.searchPsychologists(keyword);
     }
