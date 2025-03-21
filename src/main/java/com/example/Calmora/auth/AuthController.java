@@ -37,7 +37,7 @@ public class AuthController {
 
         AppUser user = appUserService.loadUserByEmail(registerRequest.getEmail());
 
-        return ResponseEntity.ok( new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname(), user.getEmail()));
+        return ResponseEntity.ok( new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname(), user.getEmail(), user.getId()));
     }
 
     @PostMapping("/login")
@@ -51,7 +51,7 @@ public class AuthController {
         System.out.println("Ruoli (authorities): " + auth.getAuthorities());
 
         AppUser user = appUserService.loadUserByEmail(loginRequest.getEmail());
-        return ResponseEntity.ok(new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname(), user.getEmail()));
+        return ResponseEntity.ok(new AuthResponse(token, user.getRole().toString(), user.getName(), user.getSurname(), user.getEmail(), user.getId()));
     }
 
     @GetMapping("/patients")
