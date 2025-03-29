@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -64,5 +65,22 @@ public class AuthController {
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<Psychologist> searchPsychologists(@RequestParam String keyword) {
         return appUserService.searchPsychologists(keyword);
+    }
+
+    @PutMapping("/{id}/profile-image")
+    public ResponseEntity<?> updateProfileImage(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        System.out.println("Body ricevuto: " + body);
+        String imageUrl = body.get("profileImageUrl");
+        System.out.println("Image URL ricevuto: " + imageUrl);
+        appUserService.updateProfileImage(id, imageUrl);
+        return ResponseEntity.ok("Immagine profilo aggiornata");
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_PSYCHOLOGIST')")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        AppUser user = appUserRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+        return ResponseEntity.ok(user);
     }
 }

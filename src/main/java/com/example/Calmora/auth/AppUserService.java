@@ -164,4 +164,12 @@ public class AppUserService {
     public List<Psychologist> searchPsychologists(String keyword) {
         return appUserRepository.searchPsychologists(keyword);
     }
+
+    public void updateProfileImage(Long userId, String imageUrl) {
+        AppUser user = appUserRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
+
+        user.setProfileImageUrl(imageUrl);
+        appUserRepository.save(user);
+    }
 }

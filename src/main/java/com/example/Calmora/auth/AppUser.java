@@ -40,6 +40,9 @@ public class AppUser implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+    @Column(name = "profile_img_url")
+    private String profileImageUrl;
+
     public void setRole(Role role) {
         this.role = role;
     }
@@ -65,5 +68,6 @@ public class AppUser implements UserDetails {
         this.email = email;
         this.password = password;
         this.role = role != null ? role : Role.ROLE_USER;
+        this.profileImageUrl = "https://res.cloudinary.com/dr4bdbfcw/image/upload/v1743172394/avatar_rhi0op.png";
     }
 }
